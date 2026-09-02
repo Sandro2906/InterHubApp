@@ -24,19 +24,30 @@ export default async function OglasDetaljiPage({ params }) {
 
   const oglas = oglasi[0];
 
+  const [questions] = await db.query(
+    "SELECT pitanje FROM oglas_pitanje WHERE oglas_id = ? ORDER BY pozicija",
+    [id]
+  );
+
   const [prijave] = await db.query(
     `
-    SELECT 
+    SELECT
       users.id,
       users.ime,
       users.email,
       users.phone,
       users.linkedin_url,
-      prijave.datum_prijave
+      prijave.datum_prijave,
+      COALESCE(scores.score, 0) AS score
     FROM prijave
     JOIN users ON prijave.user_id = users.id
+    LEFT JOIN (
+      SELECT prijava_id, ROUND(AVG(vrijednost) / 10 * 100, 2) AS score
+      FROM prijava_odgovor
+      GROUP BY prijava_id
+    ) AS scores ON scores.prijava_id = prijave.id
     WHERE prijave.oglas_id = ?
-    ORDER BY prijave.datum_prijave DESC
+    ORDER BY score DESC, prijave.datum_prijave DESC
     `,
     [id]
   );
@@ -130,6 +141,36 @@ export default async function OglasDetaljiPage({ params }) {
               />
             </div>
 
+            <div className="md:col-span-2 grid gap-4">
+              <div>
+                <label className="mb-2 block text-sm text-slate-300">Pitanje 1</label>
+                <input
+                  type="text"
+                  name="question1"
+                  defaultValue={questions[0]?.pitanje || ""}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-cyan-400"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm text-slate-300">Pitanje 2</label>
+                <input
+                  type="text"
+                  name="question2"
+                  defaultValue={questions[1]?.pitanje || ""}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-cyan-400"
+                />
+              </div>
+              <div>
+                <label className="mb-2 block text-sm text-slate-300">Pitanje 3</label>
+                <input
+                  type="text"
+                  name="question3"
+                  defaultValue={questions[2]?.pitanje || ""}
+                  className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-cyan-400"
+                />
+              </div>
+            </div>
+
             <div className="md:col-span-2">
               <label className="mb-2 block text-sm text-slate-300">Datum</label>
               <input
@@ -174,6 +215,7 @@ export default async function OglasDetaljiPage({ params }) {
                     <th className="px-4 py-3">Ime</th>
                     <th className="px-4 py-3">Email</th>
                     <th className="px-4 py-3">Telefon</th>
+                    <th className="px-4 py-3">Rezultat (%)</th>
                     <th className="px-4 py-3">Datum prijave</th>
                     <th className="px-4 py-3">Akcije</th>
                   </tr>
@@ -188,6 +230,7 @@ export default async function OglasDetaljiPage({ params }) {
                       <td className="px-4 py-3">{kandidat.ime}</td>
                       <td className="px-4 py-3">{kandidat.email}</td>
                       <td className="px-4 py-3">{kandidat.phone || "Nema"}</td>
+                      <td className="px-4 py-3">{typeof kandidat.score === "number" ? kandidat.score.toFixed(2) : Number(kandidat.score || 0).toFixed(2)}%</td>
                       <td className="px-4 py-3">
                         {new Date(kandidat.datum_prijave).toLocaleDateString("sr-RS")}
                       </td>

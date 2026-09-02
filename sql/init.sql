@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS prijava_odgovor;
+DROP TABLE IF EXISTS oglas_pitanje;
 DROP TABLE IF EXISTS prijave;
 DROP TABLE IF EXISTS oglas;
 DROP TABLE IF EXISTS users;
@@ -10,6 +12,7 @@ CREATE TABLE users (
   role ENUM('osoba', 'firma') NOT NULL,
   phone VARCHAR(30),
   cv_url VARCHAR(255),
+  linkedin_url VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -31,7 +34,25 @@ CREATE TABLE prijave (
   id INT PRIMARY KEY AUTO_INCREMENT,
   oglas_id INT NOT NULL,
   user_id INT NOT NULL,
+  poruka TEXT,
   datum_prijave TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (oglas_id) REFERENCES oglas(OglasID) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE oglas_pitanje (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  oglas_id INT NOT NULL,
+  pitanje TEXT NOT NULL,
+  pozicija TINYINT NOT NULL DEFAULT 1,
+  FOREIGN KEY (oglas_id) REFERENCES oglas(OglasID) ON DELETE CASCADE
+);
+
+CREATE TABLE prijava_odgovor (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  prijava_id INT NOT NULL,
+  pitanje_id INT NOT NULL,
+  vrijednost TINYINT NOT NULL,
+  FOREIGN KEY (prijava_id) REFERENCES prijave(id) ON DELETE CASCADE,
+  FOREIGN KEY (pitanje_id) REFERENCES oglas_pitanje(id) ON DELETE CASCADE
 );

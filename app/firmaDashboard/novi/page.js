@@ -13,6 +13,9 @@ export default function NoviOglasPage() {
         <input name="iskustvo" placeholder="Iskustvo" className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3" />
         <input name="plata" type="number" step="0.01" placeholder="Plata" className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3" />
         <input name="datum" type="date" className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3" />
+        <input name="question1" placeholder="Pitanje 1" className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3" />
+        <input name="question2" placeholder="Pitanje 2" className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3" />
+        <input name="question3" placeholder="Pitanje 3" className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3" />
 
         <button className="rounded-xl bg-cyan-500 px-5 py-3 font-semibold">
           Dodaj oglas
