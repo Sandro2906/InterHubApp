@@ -30,8 +30,8 @@ export function FilterOglasa({ initialSearch = "", initialGrad = "" }) {
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-10">
-      <div className="mb-8 rounded-3xl border border-slate-700 bg-slate-900/70 p-6 shadow-lg backdrop-blur-sm">
-        <h1 className="mb-6 text-2xl font-bold text-white">
+      <div className="mb-8 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+        <h1 className="mb-6 text-2xl font-bold text-[#0b1220]">
           Pretraga oglasa
         </h1>
 
@@ -42,13 +42,13 @@ export function FilterOglasa({ initialSearch = "", initialGrad = "" }) {
             placeholder="Pretraži poziciju ili firmu..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-white placeholder:text-slate-400 outline-none transition focus:border-cyan-400"
+            className="w-full rounded-2xl border border-gray-300 bg-[#f5f7fa] px-4 py-3 text-[#0b1220] placeholder:text-gray-400 outline-none transition focus:border-[#1a75ff] focus:bg-white focus:ring-4 focus:ring-[#1a75ff]/10"
           />
 
           <select
             value={grad}
             onChange={(e) => setGrad(e.target.value)}
-            className="w-full rounded-2xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none transition focus:border-cyan-400"
+            className="w-full rounded-2xl border border-gray-300 bg-[#f5f7fa] px-4 py-3 text-[#0b1220] outline-none transition focus:border-[#1a75ff] focus:bg-white focus:ring-4 focus:ring-[#1a75ff]/10"
           >
             <option value="">Svi gradovi</option>
             <option value="Banja Luka">Banja Luka</option>
@@ -62,7 +62,7 @@ export function FilterOglasa({ initialSearch = "", initialGrad = "" }) {
         <div className="mt-6">
           <button
             onClick={handlePretraga}
-            className="cursor-pointer rounded-2xl bg-cyan-500 px-6 py-3 font-semibold text-white transition hover:scale-105 hover:bg-cyan-400"
+            className="cursor-pointer rounded-2xl bg-[#1a75ff] px-6 py-3 font-semibold text-white shadow-lg shadow-[#1a75ff]/30 transition hover:scale-105 hover:bg-[#0f5fd6]"
           >
             Pretraži
           </button>

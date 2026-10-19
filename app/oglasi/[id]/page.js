@@ -2,6 +2,13 @@ import db from "@/lib/db";
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
 import { applyToJob } from "@/lib/actions";
+import { outfit } from "@/lib/fonts";
+
+// Iste klase za polja i labele
+const inputClass =
+  "w-full rounded-2xl border border-gray-300 bg-[#f5f7fa] px-4 py-3 text-[#0b1220] placeholder:text-gray-400 outline-none transition focus:border-[#1a75ff] focus:bg-white focus:ring-4 focus:ring-[#1a75ff]/10";
+
+const labelClass = "mb-2 block text-sm font-semibold text-gray-700";
 
 export default async function OglasDetaljiPublicPage({ params }) {
   const { id } = await params;
@@ -17,97 +24,172 @@ export default async function OglasDetaljiPublicPage({ params }) {
 
   if (!oglas) {
     return (
-      <div className="min-h-screen bg-slate-950 px-6 py-10 text-white">
-        <div className="mx-auto max-w-4xl">
-          <h1 className="text-2xl font-bold">Oglas nije pronađen.</h1>
+      <div className="min-h-screen bg-[#f5f7fa] px-6 py-20 text-[#0b1220]">
+        <div className="mx-auto max-w-xl rounded-3xl border border-dashed border-gray-300 bg-white p-12 text-center">
+          <h1 className={`${outfit.className} text-2xl font-extrabold`}>
+            OGLAS NIJE PRONAĐEN
+          </h1>
+          <p className="mt-2 text-gray-500">
+            Oglas je možda uklonjen ili link nije ispravan.
+          </p>
+          <Link
+            href="/oglasi"
+            className="mt-6 inline-block rounded-2xl bg-[#1a75ff] px-6 py-3 font-semibold text-white transition hover:bg-[#0f5fd6]"
+          >
+            Nazad na oglase
+          </Link>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-4xl space-y-6">
-        <Link href="/oglasi" className="text-cyan-400 hover:underline">
-          ← Nazad na oglase
-        </Link>
+    <div className="min-h-screen bg-[#f5f7fa] text-[#0b1220]">
+      {/* ================= ZAGLAVLJE ================= */}
+      <div className="border-b border-gray-200 bg-gradient-to-b from-[#eaf2ff] to-white">
+        <div className="mx-auto max-w-6xl px-6 py-10">
+          <Link
+            href="/oglasi"
+            className="text-sm font-semibold text-[#1a75ff] transition hover:underline"
+          >
+            ← Nazad na oglase
+          </Link>
 
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8">
-          <h1 className="mb-4 text-3xl font-bold">{oglas.Pozicija}</h1>
+          <span className="mt-6 block w-fit rounded-full bg-[#1a75ff] px-3 py-1 text-xs font-semibold text-white">
+            {oglas.Tip}
+          </span>
 
-          <div className="mb-6 grid gap-3 text-slate-300 md:grid-cols-2">
-            <p><span className="font-semibold text-white">Firma:</span> {oglas.Firma}</p>
-            <p><span className="font-semibold text-white">Lokacija:</span> {oglas.Lokacija}</p>
-            <p><span className="font-semibold text-white">Tip:</span> {oglas.Tip}</p>
-            <p><span className="font-semibold text-white">Iskustvo:</span> {oglas.Iskustvo}</p>
-            <p><span className="font-semibold text-white">Plata:</span> {oglas.Plata} KM</p>
-            <p>
-              <span className="font-semibold text-white">Datum:</span>{" "}
-              {new Date(oglas.Datum).toLocaleDateString("sr-RS")}
-            </p>
+          <h1 className={`${outfit.className} mt-4 text-3xl font-extrabold uppercase tracking-tight md:text-5xl`}>
+            {oglas.Pozicija}
+          </h1>
+
+          <p className="mt-3 text-lg text-gray-600">
+            {oglas.Firma} • {oglas.Lokacija}
+          </p>
+        </div>
+      </div>
+
+      {/* ================= SADRŽAJ ================= */}
+      <div className="mx-auto grid max-w-6xl gap-8 px-6 py-10 lg:grid-cols-3">
+        {/* LIJEVO: informacije o oglasu */}
+        <div className="space-y-8 lg:col-span-2">
+          {/* Osnovni podaci */}
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">Firma</p>
+              <p className="mt-1 font-semibold">{oglas.Firma}</p>
+            </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">Lokacija</p>
+              <p className="mt-1 font-semibold">{oglas.Lokacija}</p>
+            </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">Tip</p>
+              <p className="mt-1 font-semibold">{oglas.Tip}</p>
+            </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">Iskustvo</p>
+              <p className="mt-1 font-semibold">{oglas.Iskustvo}</p>
+            </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">Plata</p>
+              <p className="mt-1 font-semibold text-[#1a75ff]">
+                {oglas.Plata ? `${oglas.Plata} KM` : "Po dogovoru"}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+              <p className="text-sm text-gray-500">Datum objave</p>
+              <p className="mt-1 font-semibold">
+                {new Date(oglas.Datum).toLocaleDateString("sr-RS")}
+              </p>
+            </div>
           </div>
 
+          {/* Opis posla */}
           {oglas.OpisPosla && (
-            <div className="mb-8">
-              <h2 className="mb-2 text-xl font-semibold">Opis posla</h2>
-              <p className="leading-7 text-slate-300">{oglas.OpisPosla}</p>
+            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h2 className={`${outfit.className} mb-4 text-2xl font-extrabold`}>
+                OPIS POSLA
+              </h2>
+              <p className="leading-7 text-gray-700">{oglas.OpisPosla}</p>
             </div>
           )}
 
+          {/* Pitanja */}
           {questions.length > 0 && (
-            <div className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 p-6">
-              <h2 className="mb-4 text-xl font-semibold">Pitanja za prijavu</h2>
-              <div className="grid gap-4">
+            <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h2 className={`${outfit.className} mb-2 text-2xl font-extrabold`}>
+                PITANJA ZA PRIJAVU
+              </h2>
+              <p className="mb-6 text-gray-600">
+                Prilikom prijave ocjenjuješ svoje znanje od 1 do 10 za svako
+                pitanje.
+              </p>
+
+              <div className="grid gap-3">
                 {questions.map((question, index) => (
-                  <div key={question.id} className="rounded-xl border border-slate-700 bg-slate-950/30 p-4">
-                    <p className="text-slate-200">
-                      <span className="font-semibold text-white">Pitanje {index + 1}:</span> {question.pitanje}
-                    </p>
+                  <div
+                    key={question.id}
+                    className="flex items-start gap-4 rounded-2xl border border-gray-200 bg-[#f5f7fa] p-4"
+                  >
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#1a75ff] text-sm font-bold text-white">
+                      {index + 1}
+                    </span>
+                    <p className="pt-1 text-gray-700">{question.pitanje}</p>
                   </div>
                 ))}
               </div>
             </div>
           )}
+        </div>
 
-          {!user && (
-            <div className="rounded-xl border border-slate-700 bg-slate-800 p-4">
-              <p className="text-slate-300">
-                Moraš biti prijavljen da bi aplicirao.
-              </p>
-              <Link
-                href="/login"
-                className="mt-3 inline-block rounded-xl bg-cyan-500 px-4 py-2 font-semibold text-white hover:bg-cyan-400"
-              >
-                Login
-              </Link>
-            </div>
-          )}
+        {/* DESNO: prijava */}
+        <div>
+          <div className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm lg:sticky lg:top-24">
+            <h2 className={`${outfit.className} mb-4 text-2xl font-extrabold`}>
+              PRIJAVA
+            </h2>
 
-          {user?.role === "firma" && (
-            <div className="rounded-xl border border-slate-700 bg-slate-800 p-4">
-              <p className="text-slate-300">
+            {!user && (
+              <div>
+                <p className="text-gray-600">
+                  Moraš biti prijavljen da bi aplicirao na ovaj oglas.
+                </p>
+                <Link
+                  href="/login"
+                  className="mt-5 block rounded-2xl bg-[#1a75ff] px-6 py-3 text-center font-semibold text-white shadow-lg shadow-[#1a75ff]/30 transition hover:bg-[#0f5fd6]"
+                >
+                  Login
+                </Link>
+              </div>
+            )}
+
+            {user?.role === "firma" && (
+              <div className="rounded-2xl border border-gray-200 bg-[#f5f7fa] p-4 text-gray-600">
                 Firma ne može aplicirati na oglas.
-              </p>
-            </div>
-          )}
+              </div>
+            )}
 
-          {user?.role === "osoba" && (
-            <div className="space-y-4">
-              {questions.length < 3 ? (
-                <div className="rounded-xl border border-slate-700 bg-slate-800 p-4">
-                  <p className="text-slate-300">
-                    Oglas nema dovoljno pitanja za prijavu. Firma mora postaviti barem 3 pitanja.
-                  </p>
-                </div>
-              ) : (
-                <form action={applyToJob} className="space-y-4">
-                  <input type="hidden" name="oglasId" value={oglas.OglasID} />
+            {user?.role === "osoba" && (
+              <div>
+                {questions.length < 3 ? (
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-800">
+                    Oglas nema dovoljno pitanja za prijavu. Firma mora postaviti
+                    barem 3 pitanja.
+                  </div>
+                ) : (
+                  <form action={applyToJob} className="space-y-5">
+                    <input type="hidden" name="oglasId" value={oglas.OglasID} />
 
-                  <div className="grid gap-4">
-                    {questions.map((question) => (
+                    {questions.map((question, index) => (
                       <div key={question.id}>
-                        <label className="mb-2 block text-sm text-slate-300">
-                          {question.pitanje}
+                        <label className={labelClass}>
+                          {index + 1}. {question.pitanje}
                         </label>
                         <input
                           name={`answer_${question.id}`}
@@ -116,34 +198,32 @@ export default async function OglasDetaljiPublicPage({ params }) {
                           max="10"
                           required
                           placeholder="Ocijeni 1-10"
-                          className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-cyan-400"
+                          className={inputClass}
                         />
                       </div>
                     ))}
-                  </div>
 
-                  <div>
-                    <label className="mb-2 block text-sm text-slate-300">
-                      Poruka firmi
-                    </label>
-                    <textarea
-                      name="poruka"
-                      rows="5"
-                      placeholder="Napiši kratku poruku firmi..."
-                      className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none focus:border-cyan-400"
-                    />
-                  </div>
+                    <div>
+                      <label className={labelClass}>Poruka firmi</label>
+                      <textarea
+                        name="poruka"
+                        rows="5"
+                        placeholder="Napiši kratku poruku firmi..."
+                        className={inputClass}
+                      />
+                    </div>
 
-                  <button
-                    type="submit"
-                    className="rounded-xl bg-cyan-500 px-6 py-3 font-semibold text-white transition hover:bg-cyan-400"
-                  >
-                    Apliciraj
-                  </button>
-                </form>
-              )}
-            </div>
-          )}
+                    <button
+                      type="submit"
+                      className="w-full cursor-pointer rounded-2xl bg-[#1a75ff] px-6 py-3.5 font-semibold text-white shadow-lg shadow-[#1a75ff]/30 transition hover:-translate-y-0.5 hover:bg-[#0f5fd6]"
+                    >
+                      Apliciraj
+                    </button>
+                  </form>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
